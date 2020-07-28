@@ -4,7 +4,7 @@ body {
 
 .grid {
     width: 600px;
-    height: 600px;
+    height: auto;
     margin: 0 auto;
     background-color: #fff;
     padding: 10px 50px 50px 50px;
@@ -22,19 +22,13 @@ body {
 
 }
 
-#score {
-    color: #01BBFF;
-    text-align: center;
-    font-size: 30px;
-}
-
 .grid #question {
     font-family: "monospace";
     font-size: 30px;
     color: #01BBFF;
 }
 
-#answer {
+.answer {
     width: 100%;
     background-color: #fff;
     border: 1px solid black;
@@ -42,14 +36,6 @@ body {
     border-radius: 5px;
     padding: 10px;
     margin-top: 20px
-}
-
-#answer.correct {
-    background-color: #32CD32;
-}
-
-#answer.wrong {
-    background-color: ##FF6347;
 }
 
 .buttons {
