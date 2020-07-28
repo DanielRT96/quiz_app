@@ -1,13 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
-<head>
+<head lang="en">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
+    <title>Quiz</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
+    <div class="grid">
+        <div id="quiz">
+            <h1>Quiz App</h1>
+            <hr style="margin-bottom: 20px">
+
+            <p id="question">Test question?</p>
+
+            <div class="buttons">
+                <button id="btn0"><span id="choice0">Answer 1</span></button>
+                <button id="btn1"><span id="choice1">Answer 2</span></button>
+                <button id="btn2"><span id="choice2">Answer 3</span></button>
+                <button id="btn3"><span id="choice3">Answer 4</span></button>
+            </div>
+
+            <hr style="margin-top: 50px">
+            <footer>
+                <p id="progress">Question x of y</p>
+            </footer>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
 
 </body>
 
