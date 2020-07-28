@@ -1,5 +1,5 @@
 const btnNext = document.querySelector("#new-btn");
-const addAnswer = document.querySelector("#answer");
+const addAnswer = document.querySelector(".answer");
 const questionText = document.getElementById("question");
 const selectAnswer = document.getElementById("answer");
 let correctAnswer;
@@ -26,9 +26,12 @@ function newQuestion() {
   callAPI().then((data) => {
     correctAnswer = data[0].answer;
   });
+  selectAnswer.value = "";
+  selectAnswer.style.backgroundColor = "#fff";
 }
+
 btnNext.addEventListener("click", () => {
-  document.getElementById("answer").value = "";
+  selectAnswer.value = "";
   newQuestion();
 });
 
@@ -36,12 +39,10 @@ addAnswer.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     const input = selectAnswer.value;
     if (input === correctAnswer) {
-      addAnswer.classList.add("answer.correct");
-      setTimeout(newQuestion(), 100000);
-      document.getElementById("answer").value = "";
-      console.log("correct");
+      selectAnswer.style.backgroundColor = "#32CD32";
+      setTimeout(newQuestion, 5000);
     } else {
-      console.log("incorrect");
+      selectAnswer.style.backgroundColor = "#FF6347";
     }
   }
 });
