@@ -1,31 +1,47 @@
-const callAPI = () => {
-  fetch("http://jservice.io/api/random")
-    .then((response) => response.json())
-    .then((data) => {
-      const answer = data[0].answer;
-      const question = data[0].question;
-      console.log(question);
-      console.log(answer);
-      console.log(data);
-      document.getElementById("question").innerHTML = question;
-    });
-};
+const btnNext = document.querySelector("#new-btn");
+const addAnswer = document.querySelector("#answer");
+const questionText = document.getElementById("question");
+let correctAnswer;
 
-callAPI();
+async function callAPI() {
+  try {
+    const result = await fetch("http://jservice.io/api/random");
+    const data = await result.json();
+    const answer = data[0].answer;
+    const question = data[0].question;
 
-const answerBox = document.querySelector("#answer");
+    console.log(question);
+    console.log(answer);
 
-document.querySelector("#new-btn").addEventListener("click", () => {
-  document.getElementById("answer").value = "";
-  callAPI();
+    questionText.innerHTML = question;
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+callAPI().then((data) => {
+  correctAnswer = data[0].answer;
 });
 
-answerBox.addEventListener("keypress", (e) => {
+btnNext.addEventListener("click", () => {
+  document.getElementById("answer").value = "";
+  callAPI().then((data) => {
+    correctAnswer = data[0].answer;
+  });
+});
+
+addAnswer.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     const input = document.getElementById("answer").value;
-
-    input === callAPI.answer ? console.log("correct") : console.log("false");
-
+    if (input === correctAnswer) {
+      document.getElementById("answer").value = "";
+      callAPI();
+      console.log("correct");
+    } else {
+      console.log("incorrect");
+    }
     console.log(input);
   }
 });
