@@ -10,6 +10,7 @@ const gridElement = document.getElementById("grid");
 const btnTimer = document.getElementById("timer-btn");
 const dropContent = document.getElementById("drop-content");
 const dropDown = document.getElementById("dropdown");
+const quizClass = document.querySelector("#question");
 
 // Global variables
 let correctAnswer, timer;
@@ -37,9 +38,12 @@ async function callAPI() {
 
 // Move to next question incase of correct answer / Base game
 async function newQuestion() {
+  questionText.innerHTML = "";
+  renderLoader(quizClass);
   await callAPI().then((data) => {
     correctAnswer = data[0].answer;
   });
+  clearLoader();
   selectAnswer.value = "";
   selectAnswer.style.backgroundColor = "#fff";
 }
@@ -55,10 +59,22 @@ function openDropdown() {
   dropContent.classList.toggle("active");
 }
 
-// Hide dropdown list
-function hideDropdown() {
-  dropContent.classList.remove("active");
-}
+//Render loader while waiting for quesiton
+const renderLoader = (parent) => {
+  const loader = `
+  <div class="loader">
+    <svg>
+      <use href="icons.svg#icon-cw"></use>
+    </svg>
+  </div>
+  `;
+  parent.insertAdjacentHTML("afterbegin", loader);
+};
+// Clear loader after question is loaded
+const clearLoader = () => {
+  const loader = document.querySelector(".loader");
+  if (loader) loader.parentElement.removeChild(loader);
+};
 
 ///////////////// Event handlers /////////////////////
 
@@ -74,20 +90,20 @@ addAnswer.addEventListener("keypress", (e) => {
       const input = selectAnswer.value;
       if (input === correctAnswer) {
         selectAnswer.style.backgroundColor = "#32CD32";
-        setTimeout(newQuestion, 3000);
+        setTimeout(newQuestion, 3000); // If the answer is correct, move to next question after 3 seconds
       } else {
         selectAnswer.style.backgroundColor = "#FF6347";
-        setTimeout(resetQuestion, 3000);
+        setTimeout(resetQuestion, 3000); // If the answer is incorrect, reset after 3 seconds
       }
     }, timer);
-  } // Time setter for user
+  }
 });
 
 // Time selection
 dropDown.addEventListener("click", (e) => {
   openDropdown();
   if (e.target && e.target.nodeName === "LI") {
-    console.log(parseInt(e.target.id) * 1000);
+    console.log(parseInt(e.target.id) * 1000); // Remove at deployment
     timer = parseInt(e.target.id) * 1000;
   }
 });
