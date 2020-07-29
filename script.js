@@ -9,9 +9,10 @@ const buttonsElement = document.getElementById("buttons");
 const gridElement = document.getElementById("grid");
 const btnTimer = document.getElementById("timer-btn");
 const dropContent = document.getElementById("drop-content");
+const dropDown = document.getElementById("dropdown");
 
 // Global variables
-let correctAnswer;
+let correctAnswer, timer;
 
 //////////////// Functions //////////////////
 
@@ -59,18 +60,7 @@ function hideDropdown() {
   dropContent.classList.remove("active");
 }
 
-// Time selection
-function selectTime(e) {
-  document.querySelector(".drop-content").addEventListener("click", (e) => {
-    console.log(e.target.id);
-    if (e.target && e.target.nodeName === "LI") {
-      console.log(e.target.id);
-    }
-  });
-}
-
 ///////////////// Event handlers /////////////////////
-btnTimer.addEventListener("click", openDropdown);
 
 btnNext.addEventListener("click", () => {
   selectAnswer.value = "";
@@ -89,8 +79,17 @@ addAnswer.addEventListener("keypress", (e) => {
         selectAnswer.style.backgroundColor = "#FF6347";
         setTimeout(resetQuestion, 3000);
       }
-    }, 3000);
+    }, timer);
   } // Time setter for user
+});
+
+// Time selection
+dropDown.addEventListener("click", (e) => {
+  openDropdown();
+  if (e.target && e.target.nodeName === "LI") {
+    console.log(parseInt(e.target.id) * 1000);
+    timer = parseInt(e.target.id) * 1000;
+  }
 });
 
 // btnCategories.addEventListener("click", () => {
