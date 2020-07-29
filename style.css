@@ -1,75 +1,123 @@
 body {
-    background-color: #413D3D;
+  background-color: #413d3d;
 }
 
 .grid {
-    width: 600px;
-    height: auto;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 10px 50px 50px 50px;
-    border: 2px solid #cbcbcb;
+  width: 600px;
+  height: auto;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 10px 50px 50px 50px;
+  border: 2px solid #cbcbcb;
+}
 
+.category {
+  width: 600px;
+  height: auto;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 10px 50px 50px 50px;
+  border: 2px solid #cbcbcb;
 }
 
 .grid h1 {
-    font-family: "sans-serif";
-    background-color: #01BBFF;
-    font-size: 60px;
-    text-align: center;
-    color: #ffffff;
-    padding: 2px 0px;
-
+  font-family: "sans-serif";
+  background-color: #01bbff;
+  font-size: 60px;
+  text-align: center;
+  color: #ffffff;
+  padding: 2px 0px;
 }
 
 .grid #question {
-    font-family: "monospace";
-    font-size: 30px;
-    color: #01BBFF;
+  font-family: "monospace";
+  font-size: 30px;
+  color: #01bbff;
 }
 
 .answer {
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid black;
-    border-color: #01BBFF;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 20px
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid black;
+  border-color: #01bbff;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
 .buttons {
-    margin-top: 30px;
+  margin-top: 30px;
+}
+
+.drop-content {
+  position: absolute;
+  z-index: 1;
+  display: none;
+}
+
+.drop-content.active {
+  display: block;
+}
+
+.drop-content li {
+  background-color: #01bbff;
+  width: 148px;
+  font-size: 20px;
+  color: #fff;
+  border: 1px solid #1d3c6a;
+  text-decoration: none;
+  display: block;
+  margin-left: 30px;
+  text-align: center;
+}
+
+.drop-content li:hover {
+  cursor: pointer;
+  background-color: #1d3c6a;
 }
 
 #new-btn:active,
 #timer-btn:active,
 #category-btn:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 
 #new-btn:hover,
 #timer-btn:hover,
 #category-btn:hover {
-    cursor: pointer;
-    background-color: #1D3C6A;
+  cursor: pointer;
+  background-color: #1d3c6a;
 }
 
 #new-btn:focus,
 #timer-btn:focus,
 #category-btn:focus {
-    outline: 0;
+  outline: 0;
 }
 
 #new-btn,
-#timer-btn,
 #category-btn {
-    background-color: #01BBFF;
-    width: 150px;
-    font-size: 20px;
-    color: #fff;
-    border: 1px solid #1D3C6A;
-    margin: 30px 10px 20px 30px;
-    padding: 10px 10px;
+  background-color: #01bbff;
+  width: 150px;
+  font-size: 20px;
+  color: #fff;
+  border: 1px solid #1d3c6a;
+  margin: 30px 10px 20px 30px;
+  padding: 10px 10px;
+}
+
+#timer-btn {
+  background-color: #01bbff;
+  width: 150px;
+  font-size: 20px;
+  color: #fff;
+  border: 1px solid #1d3c6a;
+  margin: 30px 10px 0px 30px;
+  padding: 10px 10px;
 }
