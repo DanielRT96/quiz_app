@@ -7,38 +7,47 @@
 </head>
 
 <body>
-    <div class="grid" id='grid'>
-        <div id="quiz">
-            <h1>CoffeeQuiz</h1>
-            <hr style="margin-bottom: 20px">
+    <div class="wrapper">
+        <div class="grid" id="grid">
+            <div id="quiz">
+                <h1>CoffeeQuiz</h1>
+                <hr style="margin-bottom: 20px">
 
-            <p id="question"></p>
+                <p id="question"></p>
 
-            <input type="text" id="answer" class="answer" placeholder="Please write your answer here."></input>
-            <!-- <label for="answer-box">Current category: #CATEGORY#</label> -->
+                <input type="text" id="answer" class="answer" placeholder="Please write your answer here."></input>
+                <!-- <label for="answer-box">Current category: #CATEGORY#</label> -->
 
-            <hr style="margin-top: 90px">
+                <hr style="margin-top: 90px">
 
-        </div>
-        <div class="buttons" id='buttons'>
-            <button id="new-btn" class="buttons">New Question</button>
-            <div class='dropdown' id="dropdown">
-                <button id="timer-btn" class="buttons">Set timer</button>
-                <div class='drop-content' id="drop-content">
-                    <li id="1">1 sec</li>
-                    <li id="2">2 sec</li>
-                    <li id="3">3 sec</li>
-                    <li id="4">4 sec</li>
-                    <li id="5">5 sec</li>
-                </div>
             </div>
-            <button id="category-btn" class="buttons">Categories</button>
+            <div class="buttons" id='buttons'>
+                <button id="new-btn" class="buttons">New Question</button>
+                <div class='dropdown' id="dropdown">
+                    <button id="timer-btn" class="buttons">Set timer</button>
+                    <div class='drop-content' id="drop-content">
+                        <li id="1">1 sec</li>
+                        <li id="2">2 sec</li>
+                        <li id="3">3 sec</li>
+                        <li id="4">4 sec</li>
+                        <li id="5">5 sec</li>
+                    </div>
+                </div>
+                <button id="category-btn" class="buttons">Categories</button>
+            </div>
         </div>
-    </div>
+        <div class="category">
+            <div id="quiz">
+                <h1>Categories</h1>
+                <hr style="margin-bottom: 20px">
 
+                <hr style="margin-top: 90px">
 
-    <script src="script.js"></script>
+                </>
+            </div>
+        </div>
 
+        <script src="script.js"></script>
 
 </body>
 
