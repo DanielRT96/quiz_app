@@ -6,10 +6,11 @@ const dropContent = document.getElementById("drop-content");
 const dropDown = document.getElementById("dropdown");
 const questionEl = document.querySelector("#question");
 const optionsContainer = document.querySelector(".options-container");
+const autoSelect = document.querySelector("#auto-select");
 
 // Global variables
 let correctAnswer, timer, currentQuestion, categoryID, categoryName;
-let categoryIDs = [];
+const categoryIDs = [];
 const randomAPI = "http://jservice.io/api/random";
 const categoriesAPI = "http://jservice.io/api/categories?count=10";
 
@@ -74,6 +75,7 @@ const renderLoader = (parent) => {
   parent.insertAdjacentHTML("afterbegin", loader);
 };
 
+// Current category label
 const currentCategory = (parent, catName) => {
   const label = `
   <div class="category-label">Current category: <b>${catName}</b></div>
@@ -87,31 +89,36 @@ const clearElement = (id) => {
   if (element) element.parentElement.removeChild(element);
 };
 
+// Get categories from API
 const getCategories = async () => {
   const result = await callAPI(categoriesAPI);
-  // console.log(result);
   for (let i = 0; i < result.length; i++) {
     categoryIDs.push(result[i]);
   }
 };
 
+// Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
-  <div class="option"><input type="checkbox" id="${category.id}" name="${category.title}" checked></input><label for="${category.id}">${category.title}</label></div>
+  <div class="option"><input type="checkbox" id="checkboxes" name="${category.title}" ></input><label for="${category.id}">${category.title}</label></div>
   `;
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
 
+// Categories control panel
 const categoryControl = async () => {
   await getCategories();
   categoryIDs.forEach(renderCategory);
 };
+
 ///////////////// Event handlers /////////////////////
 
+// New Question
 btnNext.addEventListener("click", () => {
   newQuestion();
 });
 
+// Insert input
 answerEl.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     answerEl.style.backgroundColor = "#DCDCDC";
@@ -137,6 +144,13 @@ dropDown.addEventListener("click", (e) => {
   }
 });
 
-// Start app - first question is randomly generated
+autoSelect.addEventListener("click", () => {
+  const checkboxes = document.querySelectorAll("#checkboxes");
+  for (i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = true;
+  }
+});
+
+// Start app
 newQuestion();
 categoryControl();
