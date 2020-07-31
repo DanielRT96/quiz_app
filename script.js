@@ -1,21 +1,17 @@
 // DOMstrings
 const btnNext = document.querySelector("#new-btn");
-const addAnswer = document.querySelector(".answer");
-const questionText = document.getElementById("question");
-const selectAnswer = document.getElementById("answer");
-const btnCategories = document.querySelector("#category-btn");
-const quizElement = document.getElementById("quiz");
-const buttonsElement = document.getElementById("buttons");
-const gridElement = document.getElementById("grid");
-const btnTimer = document.getElementById("timer-btn");
+const answerEl = document.querySelector("#answer");
+const questionText = document.querySelector("#question");
 const dropContent = document.getElementById("drop-content");
 const dropDown = document.getElementById("dropdown");
-const quizClass = document.querySelector("#question");
+const questionEl = document.querySelector("#question");
+const optionsContainer = document.querySelector(".options-container");
 
 // Global variables
-let correctAnswer, timer, currentQuestion;
+let correctAnswer, timer, currentQuestion, categoryID, categoryName;
+let categoryIDs = [];
 const randomAPI = "http://jservice.io/api/random";
-const categoriesAPI = "http://jservice.io/api/categories?count=5";
+const categoriesAPI = "http://jservice.io/api/categories?count=10";
 
 //////////////// Functions //////////////////
 
@@ -24,12 +20,6 @@ async function callAPI(apiURL) {
   try {
     const result = await fetch(apiURL);
     const data = await result.json();
-    const answer = data[0].answer; // remove at deployment
-    const question = data[0].question;
-
-    console.log(question); // Remove at deployment
-    console.log(answer); // Remove at deployment
-
     return data;
   } catch (error) {
     console.log(error);
@@ -37,23 +27,34 @@ async function callAPI(apiURL) {
 }
 
 // Move to next question incase of correct answer / Base game
-async function newQuestion() {
+const newQuestion = async () => {
+  clearElement(".category-label");
   questionText.innerHTML = "";
-  renderLoader(quizClass);
+
+  renderLoader(questionEl);
+
   await callAPI(randomAPI).then((data) => {
     correctAnswer = data[0].answer;
     currentQuestion = data[0].question;
+    categoryID = data[0].category.id;
+    categoryName = data[0].category.title;
+
+    console.log(currentQuestion);
+    console.log(correctAnswer);
   });
-  clearLoader();
+
+  clearElement(".loader");
+
+  currentCategory(answerEl, categoryName);
+
   questionText.innerHTML = currentQuestion;
-  selectAnswer.value = "";
-  selectAnswer.style.backgroundColor = "#fff";
-}
+  resetQuestion();
+};
 
 // Reset answer UI incase of wrong answer
 const resetQuestion = () => {
-  selectAnswer.value = "";
-  selectAnswer.style.backgroundColor = "#fff";
+  answerEl.value = "";
+  answerEl.style.backgroundColor = "#fff";
 };
 
 // Open dropdown list
@@ -73,36 +74,55 @@ const renderLoader = (parent) => {
   parent.insertAdjacentHTML("afterbegin", loader);
 };
 
-// Clear loader after question is loaded
-const clearLoader = () => {
-  const loader = document.querySelector(".loader");
-  if (loader) loader.parentElement.removeChild(loader);
+const currentCategory = (parent, catName) => {
+  const label = `
+  <div class="category-label">Current category: <b>${catName}</b></div>
+  `;
+  parent.insertAdjacentHTML("afterend", label);
 };
 
-const openCategory = async () => {
-  await callAPI(categoriesAPI).then((data) => {
-    console.log(data);
-  });
+// Clear element
+const clearElement = (id) => {
+  const element = document.querySelector(id);
+  if (element) element.parentElement.removeChild(element);
 };
 
+const getCategories = async () => {
+  const result = await callAPI(categoriesAPI);
+  // console.log(result);
+  for (let i = 0; i < result.length; i++) {
+    categoryIDs.push(result[i]);
+  }
+};
+
+const renderCategory = (category) => {
+  const newOption = `
+  <div class="option"><input type="checkbox" id="${category.id}" name="${category.title}" checked></input><label for="${category.id}">${category.title}</label></div>
+  `;
+  optionsContainer.insertAdjacentHTML("afterbegin", newOption);
+};
+
+const categoryControl = async () => {
+  await getCategories();
+  categoryIDs.forEach(renderCategory);
+};
 ///////////////// Event handlers /////////////////////
 
 btnNext.addEventListener("click", () => {
-  selectAnswer.value = "";
   newQuestion();
 });
 
-addAnswer.addEventListener("keypress", (e) => {
+answerEl.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    selectAnswer.style.backgroundColor = "#DCDCDC";
+    answerEl.style.backgroundColor = "#DCDCDC";
     setTimeout(() => {
-      const input = selectAnswer.value;
+      const input = answerEl.value;
       if (input === correctAnswer) {
-        selectAnswer.style.backgroundColor = "#32CD32";
-        setTimeout(newQuestion, 2000); // If the answer is correct, move to next question after 3 seconds
+        answerEl.style.backgroundColor = "#32CD32";
+        setTimeout(newQuestion, 3000); // If the answer is correct, move to next question after 3 seconds
       } else {
-        selectAnswer.style.backgroundColor = "#FF6347";
-        setTimeout(resetQuestion, 2000); // If the answer is incorrect, reset after 3 seconds
+        answerEl.style.backgroundColor = "#FF6347";
+        setTimeout(resetQuestion, 3000); // If the answer is incorrect, reset after 3 seconds
       }
     }, timer);
   }
@@ -117,8 +137,6 @@ dropDown.addEventListener("click", (e) => {
   }
 });
 
-// Open category grid
-btnCategories.addEventListener("click", openCategory);
-
 // Start app - first question is randomly generated
 newQuestion();
+categoryControl();

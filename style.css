@@ -3,7 +3,7 @@ body {
 }
 
 .wrapper {
-    width: 900px;
+    width: 1000px;
     display: flex;
     margin: 0 auto;
 
@@ -20,11 +20,12 @@ body {
 }
 
 .category {
-    width: 100px;
+    width: 200px;
     margin: 0 auto;
     background-color: #fff;
     padding: 10px 50px 50px 50px;
     border: 2px solid #cbcbcb;
+    text-align: left;
 }
 
 
@@ -69,6 +70,7 @@ body {
 
 .buttons {
     margin-top: 30px;
+    margin-left: 80px;
 }
 
 .drop-content {
@@ -121,6 +123,20 @@ body {
     }
 }
 
+.category-label {
+    font-family: "sans-serif";
+    color: #01bbff;
+    font-size: 15px;
+    padding: 2px 1px;
+}
+
+.option {
+    padding: 10px 1px;
+    color: #01bbff;
+    font-family: "sans-serif";
+    font-size: 15px;
+}
+
 #new-btn:active,
 #timer-btn:active,
 #category-btn:active {
@@ -148,7 +164,7 @@ body {
     font-size: 20px;
     color: #fff;
     border: 1px solid #1d3c6a;
-    margin: 30px 10px 20px 30px;
+    margin: 30px 50px 20px 30px;
     padding: 10px 10px;
 }
 
@@ -158,6 +174,6 @@ body {
     font-size: 20px;
     color: #fff;
     border: 1px solid #1d3c6a;
-    margin: 30px 10px 0px 30px;
+    margin: 10px 10px 0px 30px;
     padding: 10px 10px;
 }
