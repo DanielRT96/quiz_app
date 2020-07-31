@@ -139,21 +139,24 @@ body {
 
 #new-btn:active,
 #timer-btn:active,
-#auto-select:active {
+#auto-select:active,
+#uncheck:active {
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
 
 #new-btn:hover,
 #timer-btn:hover,
-#auto-select:hover {
+#auto-select:hover,
+#uncheck:hover {
     cursor: pointer;
     background-color: #1d3c6a;
 }
 
 #new-btn:focus,
 #timer-btn:focus,
-#auto-select:focus {
+#auto-select:focus,
+#uncheck:focus {
     outline: 0;
 }
 
@@ -168,7 +171,8 @@ body {
     padding: 10px 10px;
 }
 
-#auto-select {
+#auto-select,
+#uncheck {
     background-color: #01bbff;
     width: 150px;
     font-size: 20px;

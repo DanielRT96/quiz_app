@@ -7,6 +7,8 @@ const dropDown = document.getElementById("dropdown");
 const questionEl = document.querySelector("#question");
 const optionsContainer = document.querySelector(".options-container");
 const autoSelect = document.querySelector("#auto-select");
+const uncheckBtn = document.querySelector("#uncheck");
+const checkboxes = document.querySelector("#checkboxes");
 
 // Global variables
 let correctAnswer, timer, currentQuestion, categoryID, categoryName;
@@ -29,9 +31,9 @@ async function callAPI(apiURL) {
 
 // Move to next question incase of correct answer / Base game
 const newQuestion = async () => {
+  resetQuestion();
   clearElement(".category-label");
   questionText.innerHTML = "";
-
   renderLoader(questionEl);
 
   await callAPI(randomAPI).then((data) => {
@@ -45,11 +47,8 @@ const newQuestion = async () => {
   });
 
   clearElement(".loader");
-
   currentCategory(answerEl, categoryName);
-
   questionText.innerHTML = currentQuestion;
-  resetQuestion();
 };
 
 // Reset answer UI incase of wrong answer
@@ -100,7 +99,7 @@ const getCategories = async () => {
 // Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
-  <div class="option"><input type="checkbox" id="checkboxes" name="${category.title}" ></input><label for="${category.id}">${category.title}</label></div>
+  <div class="option"><input type="radio" id="checkboxes" name="checkBox" onlcick="selectOnlyThis(this)"></input><label for="${category.id}">${category.title}</label></div>
   `;
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
@@ -108,9 +107,33 @@ const renderCategory = (category) => {
 // Categories control panel
 const categoryControl = async () => {
   await getCategories();
+  // console.log(categoryIDs);
   categoryIDs.forEach(renderCategory);
 };
 
+// Select only one checkbox
+const selectOnlyThis = (id) => {
+  const checkboxes = document.querySelectorAll("#checkboxes");
+  Array.prototype.forEach.call(checkboxes, (el) => {
+    el.checked = false;
+  });
+  id.checked = true;
+};
+
+const uncheckAll = () => {
+  const checkboxes = document.querySelectorAll("#checkboxes");
+  for (i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = false;
+  }
+};
+
+// const filterCategories = async () => {
+//   await getCategories();
+//   const result = await callAPI(
+//     `http://jservice.io/api/clues?category=${category - id}`
+//   );
+// };
+// filterCategories();
 ///////////////// Event handlers /////////////////////
 
 // New Question
@@ -126,10 +149,10 @@ answerEl.addEventListener("keypress", (e) => {
       const input = answerEl.value;
       if (input === correctAnswer) {
         answerEl.style.backgroundColor = "#32CD32";
-        setTimeout(newQuestion, 3000); // If the answer is correct, move to next question after 3 seconds
+        setTimeout(newQuestion, 1000); // If the answer is correct, move to next question after 3 seconds
       } else {
         answerEl.style.backgroundColor = "#FF6347";
-        setTimeout(resetQuestion, 3000); // If the answer is incorrect, reset after 3 seconds
+        setTimeout(resetQuestion, 1000); // If the answer is incorrect, reset after 3 seconds
       }
     }, timer);
   }
@@ -146,10 +169,15 @@ dropDown.addEventListener("click", (e) => {
 
 autoSelect.addEventListener("click", () => {
   const checkboxes = document.querySelectorAll("#checkboxes");
+  const random = Math.floor(Math.random() * 10);
+
   for (i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].checked = true;
+    checkboxes[i].checked = false;
   }
+  checkboxes[random].checked = true;
 });
+
+uncheckBtn.addEventListener("click", uncheckAll);
 
 // Start app
 newQuestion();
