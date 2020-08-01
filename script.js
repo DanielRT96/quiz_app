@@ -9,6 +9,7 @@ const optionsContainer = document.querySelector(".options-container");
 const autoSelect = document.querySelector("#auto-select");
 const uncheckBtn = document.querySelector("#uncheck");
 const checkboxes = document.querySelectorAll("#checkboxes");
+const categoryLabel = document.querySelector(".category-label");
 
 // Global variables
 let correctAnswer, timer, currentQuestion, categoryID, categoryName, currentID;
@@ -31,20 +32,29 @@ async function callAPI(apiURL) {
 
 // Move to next question incase of correct answer / Base game
 const newQuestion = async () => {
+  const checkboxes = this.checkboxes;
+  for (i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) {
+      categoryFilter(currentID);
+      return;
+    }
+  }
+  randomQuestion();
+};
+
+const randomQuestion = async () => {
   resetQuestion();
-  clearElement(".category-label");
-  questionText.innerHTML = "";
   renderLoader(questionEl);
 
-  await callAPI(randomAPI).then((data) => {
-    correctAnswer = data[0].answer;
-    currentQuestion = data[0].question;
-    categoryID = data[0].category.id;
-    categoryName = data[0].category.title;
+  const data = await callAPI(randomAPI);
+  correctAnswer = data[0].answer;
+  currentQuestion = data[0].question;
+  categoryID = data[0].category.id;
+  categoryName = data[0].category.title;
 
-    console.log(currentQuestion);
-    console.log(correctAnswer);
-  });
+  console.log(currentQuestion);
+  console.log(correctAnswer);
+  console.log(categoryName);
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -55,6 +65,8 @@ const newQuestion = async () => {
 const resetQuestion = () => {
   answerEl.value = "";
   answerEl.style.backgroundColor = "#fff";
+  clearElement(".category-label");
+  questionText.innerHTML = "";
 };
 
 // Open dropdown list
@@ -123,7 +135,7 @@ const selectOnlyThis = (id) => {
 const displayValue = () => {
   const checkboxes = this.checkboxes;
   for (i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) console.log(checkboxes[i].value);
+    if (checkboxes[i].checked) return checkboxes[i].value; // to be removed
   }
 };
 
@@ -133,10 +145,11 @@ const uncheckAll = () => {
   for (i = 0; i < checkboxes.length; i++) {
     checkboxes[i].checked = false;
   }
+  newQuestion();
 };
 
 // Select random category
-const selectRandom = () => {
+const selectRandom = async () => {
   const checkboxes = this.checkboxes;
   const random = Math.floor(Math.random() * 10);
 
@@ -145,7 +158,32 @@ const selectRandom = () => {
   }
   checkboxes[random].checked = true;
   currentID = checkboxes[random].value;
-  console.log(currentID);
+  categoryFilter(currentID);
+};
+
+const categoryFilter = async (id) => {
+  resetQuestion();
+  renderLoader(questionEl);
+
+  const x = await callAPI(`http://jservice.io/api/category?id=${id}`);
+  const random = Math.floor(Math.random() * x.clues.length);
+  categoryID = x.id;
+  categoryName = x.title;
+  correctAnswer = x.clues[random].answer;
+  currentQuestion = x.clues[random].question;
+
+  console.log(currentQuestion);
+  console.log(correctAnswer);
+  console.log(categoryName);
+
+  clearElement(".loader");
+  currentCategory(answerEl, categoryName);
+  questionText.innerHTML = currentQuestion;
+};
+
+const setUpGame = async () => {
+  await categoryControl();
+  await newQuestion();
 };
 
 ///////////////// Event handlers /////////////////////
@@ -185,10 +223,9 @@ uncheckBtn.addEventListener("click", uncheckAll);
 
 optionsContainer.addEventListener("click", (e) => {
   if (e.target.className === "radio") {
-    displayValue();
+    currentID = displayValue();
+    categoryFilter(currentID);
   }
 });
 
-// Start app
-newQuestion();
-categoryControl();
+setUpGame();
