@@ -53,7 +53,7 @@ const randomQuestion = async () => {
   categoryID = data[0].category.id;
   categoryName = data[0].category.title;
 
-  console.log(correctAnswer); // To see the correct answer
+  console.log(correctAnswer); // To see the correct answer - production only -
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -71,11 +71,6 @@ const resetUI = () => {
   clearElement(".category-label");
   questionText.innerHTML = "";
   resetAnswerEl();
-};
-
-// Open dropdown list
-const openDropdown = () => {
-  dropContent.classList.toggle("active");
 };
 
 //Render loader while waiting for question
@@ -121,7 +116,7 @@ const getCategories = async () => {
   categoryData.forEach(renderCategory);
 };
 
-// Only one checkbox can be selected
+// Only one radio element can be selected
 const selectOnlyThis = (id) => {
   Array.prototype.forEach.call(radioBoxes, (el) => {
     el.checked = false;
@@ -171,7 +166,7 @@ const categoryQuestion = async (id) => {
   correctAnswer = x.clues[random].answer.replace(/ /g, "").toLowerCase();
   currentQuestion = x.clues[random].question;
 
-  console.log(correctAnswer); // To see the correct answer
+  console.log(correctAnswer); // To see the correct answer - production only -
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -207,7 +202,7 @@ answerEl.addEventListener("keypress", (e) => {
 
 // Time selection
 dropDown.addEventListener("click", (e) => {
-  openDropdown();
+  dropContent.classList.toggle("active");
   if (e.target && e.target.nodeName === "LI") {
     timer = parseInt(e.target.id) * 1000;
   }
