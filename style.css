@@ -31,7 +31,7 @@ body {
 
 .grid h1 {
     font-family: "sans-serif";
-    background-color: #01bbff;
+    background-color: #654321;
     font-size: 60px;
     text-align: center;
     color: #ffffff;
@@ -40,7 +40,7 @@ body {
 
 .category h1 {
     font-family: "sans-serif";
-    background-color: #01bbff;
+    background-color: #654321;
     font-size: 20px;
     text-align: center;
     color: #ffffff;
@@ -50,14 +50,14 @@ body {
 .grid #question {
     font-family: "monospace";
     font-size: 30px;
-    color: #01bbff;
+    color: #654321;
 }
 
 .answer {
     width: 100%;
     background-color: #fff;
     border: 1px solid black;
-    border-color: #01bbff;
+    border-color: #654321;
     border-radius: 5px;
     padding: 10px;
     margin-top: 20px;
@@ -84,11 +84,11 @@ body {
 }
 
 .drop-content li {
-    background-color: #01bbff;
+    background-color: #654321;
     width: 148px;
     font-size: 20px;
     color: #fff;
-    border: 1px solid #1d3c6a;
+    border: 1px solid #2b1d0e;
     text-decoration: none;
     display: block;
     margin-left: 30px;
@@ -97,7 +97,7 @@ body {
 
 .drop-content li:hover {
     cursor: pointer;
-    background-color: #1d3c6a;
+    background-color: #2b1d0e;
 }
 
 .loader {
@@ -108,7 +108,7 @@ body {
 .loader svg {
     height: 5.5rem;
     width: 5.5rem;
-    fill: #01bbff;
+    fill: #654321;
     transform-origin: 44% 50%;
     animation: rotate 1.5s infinite linear;
 }
@@ -125,14 +125,18 @@ body {
 
 .category-label {
     font-family: "sans-serif";
-    color: #01bbff;
+    color: #654321;
     font-size: 15px;
     padding: 2px 1px;
 }
 
+.options-container {
+    margin: 10px;
+}
+
 .option {
-    padding: 10px 15px;
-    color: #01bbff;
+    padding: 10px 20px;
+    color: #654321;
     font-family: "sans-serif";
     font-size: 15px;
 }
@@ -150,7 +154,7 @@ body {
 #auto-select:hover,
 #uncheck:hover {
     cursor: pointer;
-    background-color: #1d3c6a;
+    background-color: #2b1d0e;
 }
 
 #new-btn:focus,
@@ -162,24 +166,26 @@ body {
 
 #new-btn,
 #timer-btn {
-    background-color: #01bbff;
+    background-color: #654321;
     width: 150px;
     font-size: 20px;
     color: #fff;
-    border: 1px solid #1d3c6a;
+    border: 1px solid #2b1d0e;
     margin: 30px 50px 0px 30px;
     padding: 10px 10px;
+    border-radius: 12px;
 }
 
 #auto-select,
 #uncheck {
-    background-color: #01bbff;
+    background-color: #654321;
     width: 150px;
     font-size: 20px;
     color: #fff;
-    border: 1px solid #1d3c6a;
+    border: 1px solid #2b1d0e;
     padding: 10px 10px;
     margin-top: 10px;
     margin-left: -55px;
     margin-right: 50px;
+    border-radius: 12px;
 }
