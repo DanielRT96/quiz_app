@@ -48,7 +48,7 @@ const randomQuestion = async () => {
   renderLoader(questionEl);
 
   const data = await callAPI(randomAPI);
-  correctAnswer = data[0].answer;
+  correctAnswer = data[0].answer.replace(/ /g, "").toLowerCase();
   currentQuestion = data[0].question;
   categoryID = data[0].category.id;
   categoryName = data[0].category.title;
@@ -107,7 +107,7 @@ const clearElement = (id) => {
 // Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
-  <div class="option"><input type="radio" id="checkboxes" name="checkBox" class='radio' onlcick="selectOnlyThis(this)" value="${category.id}""></input><label for="checkBox">${category.title}</label></div>
+  <div class="option"><input type="radio" id="checkboxes" name="checkBox" class='radio' onlcick="selectOnlyThis(this)" value="${category.id}""></input><label for="checkBox"><b>${category.title}</b></label></div>
   `;
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
@@ -168,7 +168,7 @@ const categoryQuestion = async (id) => {
   const random = Math.floor(Math.random() * x.clues.length);
   categoryID = x.id;
   categoryName = x.title;
-  correctAnswer = x.clues[random].answer;
+  correctAnswer = x.clues[random].answer.replace(/ /g, "").toLowerCase();
   currentQuestion = x.clues[random].question;
 
   console.log(correctAnswer); // To see correct answer
@@ -193,7 +193,7 @@ answerEl.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     answerEl.style.backgroundColor = "#DCDCDC";
     setTimeout(() => {
-      const input = answerEl.value;
+      const input = answerEl.value.replace(/ /g, "").toLowerCase();
       if (input === correctAnswer) {
         answerEl.style.backgroundColor = "#32CD32";
         setTimeout(newQuestion, 1000); // If the answer is correct, move to next question after 3 seconds
