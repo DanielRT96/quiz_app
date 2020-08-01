@@ -43,7 +43,7 @@ const newQuestion = async () => {
 };
 
 const randomQuestion = async () => {
-  resetQuestion();
+  resetUI();
   renderLoader(questionEl);
 
   const data = await callAPI(randomAPI);
@@ -65,8 +65,12 @@ const randomQuestion = async () => {
 const resetQuestion = () => {
   answerEl.value = "";
   answerEl.style.backgroundColor = "#fff";
+};
+
+const resetUI = () => {
   clearElement(".category-label");
   questionText.innerHTML = "";
+  resetQuestion();
 };
 
 // Open dropdown list
@@ -162,7 +166,7 @@ const selectRandom = async () => {
 };
 
 const categoryFilter = async (id) => {
-  resetQuestion();
+  resetUI();
   renderLoader(questionEl);
 
   const x = await callAPI(`http://jservice.io/api/category?id=${id}`);
