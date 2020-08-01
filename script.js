@@ -8,10 +8,10 @@ const questionEl = document.querySelector("#question");
 const optionsContainer = document.querySelector(".options-container");
 const autoSelect = document.querySelector("#auto-select");
 const uncheckBtn = document.querySelector("#uncheck");
-const checkboxes = document.querySelector("#checkboxes");
+const checkboxes = document.querySelectorAll("#checkboxes");
 
 // Global variables
-let correctAnswer, timer, currentQuestion, categoryID, categoryName;
+let correctAnswer, timer, currentQuestion, categoryID, categoryName, currentID;
 const categoryIDs = [];
 const randomAPI = "http://jservice.io/api/random";
 const categoriesAPI = "http://jservice.io/api/categories?count=10";
@@ -99,7 +99,7 @@ const getCategories = async () => {
 // Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
-  <div class="option"><input type="radio" id="checkboxes" name="checkBox" onlcick="selectOnlyThis(this)"></input><label for="${category.id}">${category.title}</label></div>
+  <div class="option"><input type="radio" id="checkboxes" name="checkBox" class='radio' onlcick="selectOnlyThis(this)" value="${category.id}""></input><label for="checkBox">${category.title}</label></div>
   `;
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
@@ -107,39 +107,51 @@ const renderCategory = (category) => {
 // Categories control panel
 const categoryControl = async () => {
   await getCategories();
-  // console.log(categoryIDs);
   categoryIDs.forEach(renderCategory);
+  // filterCategories();
 };
 
 // Select only one checkbox
 const selectOnlyThis = (id) => {
-  const checkboxes = document.querySelectorAll("#checkboxes");
+  console.log(id.value);
   Array.prototype.forEach.call(checkboxes, (el) => {
     el.checked = false;
   });
   id.checked = true;
 };
 
+const displayValue = () => {
+  const checkboxes = this.checkboxes;
+  for (i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].checked) console.log(checkboxes[i].value);
+  }
+};
+
+// Uncheck all categories
 const uncheckAll = () => {
-  const checkboxes = document.querySelectorAll("#checkboxes");
+  const checkboxes = this.checkboxes;
   for (i = 0; i < checkboxes.length; i++) {
     checkboxes[i].checked = false;
   }
 };
 
-// const filterCategories = async () => {
-//   await getCategories();
-//   const result = await callAPI(
-//     `http://jservice.io/api/clues?category=${category - id}`
-//   );
-// };
-// filterCategories();
+// Select random category
+const selectRandom = () => {
+  const checkboxes = this.checkboxes;
+  const random = Math.floor(Math.random() * 10);
+
+  for (i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = false;
+  }
+  checkboxes[random].checked = true;
+  currentID = checkboxes[random].value;
+  console.log(currentID);
+};
+
 ///////////////// Event handlers /////////////////////
 
 // New Question
-btnNext.addEventListener("click", () => {
-  newQuestion();
-});
+btnNext.addEventListener("click", newQuestion);
 
 // Insert input
 answerEl.addEventListener("keypress", (e) => {
@@ -167,17 +179,15 @@ dropDown.addEventListener("click", (e) => {
   }
 });
 
-autoSelect.addEventListener("click", () => {
-  const checkboxes = document.querySelectorAll("#checkboxes");
-  const random = Math.floor(Math.random() * 10);
-
-  for (i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].checked = false;
-  }
-  checkboxes[random].checked = true;
-});
+autoSelect.addEventListener("click", selectRandom);
 
 uncheckBtn.addEventListener("click", uncheckAll);
+
+optionsContainer.addEventListener("click", (e) => {
+  if (e.target.className === "radio") {
+    displayValue();
+  }
+});
 
 // Start app
 newQuestion();
