@@ -8,7 +8,7 @@ const questionEl = document.querySelector("#question");
 const optionsContainer = document.querySelector(".options-container");
 const autoSelect = document.querySelector("#auto-select");
 const uncheckBtn = document.querySelector("#uncheck");
-const checkboxes = document.querySelectorAll("#checkboxes");
+const radioBoxes = document.querySelectorAll("#radioBoxes");
 const categoryLabel = document.querySelector(".category-label");
 
 // Global variables
@@ -32,9 +32,9 @@ async function callAPI(apiURL) {
 
 // Generate a new question
 const newQuestion = () => {
-  const checkboxes = this.checkboxes;
-  for (i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) {
+  const radioBoxes = this.radioBoxes;
+  for (i = 0; i < radioBoxes.length; i++) {
+    if (radioBoxes[i].checked) {
       categoryQuestion(currentID);
       return;
     }
@@ -53,7 +53,7 @@ const randomQuestion = async () => {
   categoryID = data[0].category.id;
   categoryName = data[0].category.title;
 
-  console.log(correctAnswer); // To see correct answers
+  console.log(correctAnswer); // To see the correct answer
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -107,7 +107,7 @@ const clearElement = (id) => {
 // Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
-  <div class="option"><input type="radio" id="checkboxes" name="checkBox" class='radio' onlcick="selectOnlyThis(this)" value="${category.id}""></input><label for="checkBox"><b>${category.title}</b></label></div>
+  <div class="option"><input type="radio" id="radioBoxes" name="checkBox" class="radio" onlcick="selectOnlyThis(this)" value="${category.id}""></input><label for="checkBox"><b>${category.title}</b></label></div>
   `;
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
@@ -115,7 +115,7 @@ const renderCategory = (category) => {
 // Get categories data from API
 const getCategories = async () => {
   const result = await callAPI(categoriesAPI);
-  for (let i = 0; i < result.length; i++) {
+  for (i = 0; i < result.length; i++) {
     categoryData.push(result[i]);
   }
   categoryData.forEach(renderCategory);
@@ -123,7 +123,7 @@ const getCategories = async () => {
 
 // Only one checkbox can be selected
 const selectOnlyThis = (id) => {
-  Array.prototype.forEach.call(checkboxes, (el) => {
+  Array.prototype.forEach.call(radioBoxes, (el) => {
     el.checked = false;
   });
   id.checked = true;
@@ -131,31 +131,31 @@ const selectOnlyThis = (id) => {
 
 // Get ID of a category
 const getCategoryID = () => {
-  const checkboxes = this.checkboxes;
-  for (i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) return checkboxes[i].value; // to be removed
+  const radioBoxes = this.radioBoxes;
+  for (i = 0; i < radioBoxes.length; i++) {
+    if (radioBoxes[i].checked) return radioBoxes[i].value;
   }
 };
 
 // Uncheck all category options
 const uncheckAll = () => {
-  const checkboxes = this.checkboxes;
-  for (i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].checked = false;
+  const radioBoxes = this.radioBoxes;
+  for (i = 0; i < radioBoxes.length; i++) {
+    radioBoxes[i].checked = false;
   }
   newQuestion();
 };
 
 // Select a random category
 const selectRandom = () => {
-  const checkboxes = this.checkboxes;
+  const radioBoxes = this.radioBoxes;
   const random = Math.floor(Math.random() * 10);
 
-  for (i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].checked = false;
+  for (i = 0; i < radioBoxes.length; i++) {
+    radioBoxes[i].checked = false;
   }
-  checkboxes[random].checked = true;
-  currentID = checkboxes[random].value;
+  radioBoxes[random].checked = true;
+  currentID = radioBoxes[random].value;
   categoryQuestion(currentID);
 };
 
@@ -171,7 +171,7 @@ const categoryQuestion = async (id) => {
   correctAnswer = x.clues[random].answer.replace(/ /g, "").toLowerCase();
   currentQuestion = x.clues[random].question;
 
-  console.log(correctAnswer); // To see correct answer
+  console.log(correctAnswer); // To see the correct answer
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
