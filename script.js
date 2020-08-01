@@ -13,7 +13,7 @@ const categoryLabel = document.querySelector(".category-label");
 
 // Global variables
 let correctAnswer, timer, currentQuestion, categoryID, categoryName, currentID;
-const categoryIDs = [];
+const categoryData = [];
 const randomAPI = "http://jservice.io/api/random";
 const categoriesAPI = "http://jservice.io/api/categories?count=10";
 
@@ -30,18 +30,19 @@ async function callAPI(apiURL) {
   }
 }
 
-// Move to next question incase of correct answer / Base game
-const newQuestion = async () => {
+// Generate a new question
+const newQuestion = () => {
   const checkboxes = this.checkboxes;
   for (i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) {
-      categoryFilter(currentID);
+      categoryQuestion(currentID);
       return;
     }
   }
   randomQuestion();
 };
 
+// Get a random question
 const randomQuestion = async () => {
   resetUI();
   renderLoader(questionEl);
@@ -52,25 +53,24 @@ const randomQuestion = async () => {
   categoryID = data[0].category.id;
   categoryName = data[0].category.title;
 
-  console.log(currentQuestion);
-  console.log(correctAnswer);
-  console.log(categoryName);
+  console.log(correctAnswer); // To see correct answers
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
   questionText.innerHTML = currentQuestion;
 };
 
-// Reset answer UI incase of wrong answer
-const resetQuestion = () => {
+// Reset answer element's UI
+const resetAnswerEl = () => {
   answerEl.value = "";
   answerEl.style.backgroundColor = "#fff";
 };
 
+// Reset UI
 const resetUI = () => {
   clearElement(".category-label");
   questionText.innerHTML = "";
-  resetQuestion();
+  resetAnswerEl();
 };
 
 // Open dropdown list
@@ -78,7 +78,7 @@ const openDropdown = () => {
   dropContent.classList.toggle("active");
 };
 
-//Render loader while waiting for quesiton
+//Render loader while waiting for question
 const renderLoader = (parent) => {
   const loader = `
   <div class="loader">
@@ -104,14 +104,6 @@ const clearElement = (id) => {
   if (element) element.parentElement.removeChild(element);
 };
 
-// Get categories from API
-const getCategories = async () => {
-  const result = await callAPI(categoriesAPI);
-  for (let i = 0; i < result.length; i++) {
-    categoryIDs.push(result[i]);
-  }
-};
-
 // Render categoires on UI
 const renderCategory = (category) => {
   const newOption = `
@@ -120,30 +112,32 @@ const renderCategory = (category) => {
   optionsContainer.insertAdjacentHTML("afterbegin", newOption);
 };
 
-// Categories control panel
-const categoryControl = async () => {
-  await getCategories();
-  categoryIDs.forEach(renderCategory);
-  // filterCategories();
+// Get categories data from API
+const getCategories = async () => {
+  const result = await callAPI(categoriesAPI);
+  for (let i = 0; i < result.length; i++) {
+    categoryData.push(result[i]);
+  }
+  categoryData.forEach(renderCategory);
 };
 
-// Select only one checkbox
+// Only one checkbox can be selected
 const selectOnlyThis = (id) => {
-  console.log(id.value);
   Array.prototype.forEach.call(checkboxes, (el) => {
     el.checked = false;
   });
   id.checked = true;
 };
 
-const displayValue = () => {
+// Get ID of a category
+const getCategoryID = () => {
   const checkboxes = this.checkboxes;
   for (i = 0; i < checkboxes.length; i++) {
     if (checkboxes[i].checked) return checkboxes[i].value; // to be removed
   }
 };
 
-// Uncheck all categories
+// Uncheck all category options
 const uncheckAll = () => {
   const checkboxes = this.checkboxes;
   for (i = 0; i < checkboxes.length; i++) {
@@ -152,8 +146,8 @@ const uncheckAll = () => {
   newQuestion();
 };
 
-// Select random category
-const selectRandom = async () => {
+// Select a random category
+const selectRandom = () => {
   const checkboxes = this.checkboxes;
   const random = Math.floor(Math.random() * 10);
 
@@ -162,10 +156,11 @@ const selectRandom = async () => {
   }
   checkboxes[random].checked = true;
   currentID = checkboxes[random].value;
-  categoryFilter(currentID);
+  categoryQuestion(currentID);
 };
 
-const categoryFilter = async (id) => {
+//
+const categoryQuestion = async (id) => {
   resetUI();
   renderLoader(questionEl);
 
@@ -176,9 +171,7 @@ const categoryFilter = async (id) => {
   correctAnswer = x.clues[random].answer;
   currentQuestion = x.clues[random].question;
 
-  console.log(currentQuestion);
-  console.log(correctAnswer);
-  console.log(categoryName);
+  console.log(correctAnswer); // To see correct answer
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -186,7 +179,7 @@ const categoryFilter = async (id) => {
 };
 
 const setUpGame = async () => {
-  await categoryControl();
+  await getCategories();
   await newQuestion();
 };
 
@@ -206,7 +199,7 @@ answerEl.addEventListener("keypress", (e) => {
         setTimeout(newQuestion, 1000); // If the answer is correct, move to next question after 3 seconds
       } else {
         answerEl.style.backgroundColor = "#FF6347";
-        setTimeout(resetQuestion, 1000); // If the answer is incorrect, reset after 3 seconds
+        setTimeout(resetAnswerEl, 1000); // If the answer is incorrect, reset after 3 seconds
       }
     }, timer);
   }
@@ -216,7 +209,6 @@ answerEl.addEventListener("keypress", (e) => {
 dropDown.addEventListener("click", (e) => {
   openDropdown();
   if (e.target && e.target.nodeName === "LI") {
-    console.log(parseInt(e.target.id) * 1000); // Remove at deployment
     timer = parseInt(e.target.id) * 1000;
   }
 });
@@ -227,9 +219,10 @@ uncheckBtn.addEventListener("click", uncheckAll);
 
 optionsContainer.addEventListener("click", (e) => {
   if (e.target.className === "radio") {
-    currentID = displayValue();
-    categoryFilter(currentID);
+    currentID = getCategoryID();
+    categoryQuestion(currentID);
   }
 });
 
+// Game initializer
 setUpGame();
