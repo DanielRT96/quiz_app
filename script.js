@@ -53,7 +53,7 @@ const randomQuestion = async () => {
   categoryID = data[0].category.id;
   categoryName = data[0].category.title;
 
-  console.log(correctAnswer); // To see the correct answer - production only -
+  console.log(correctAnswer); // To see the correct answer - development only -
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
@@ -166,7 +166,7 @@ const categoryQuestion = async (id) => {
   correctAnswer = x.clues[random].answer.replace(/ /g, "").toLowerCase();
   currentQuestion = x.clues[random].question;
 
-  console.log(correctAnswer); // To see the correct answer - production only -
+  console.log(correctAnswer); // To see the correct answer - development only -
 
   clearElement(".loader");
   currentCategory(answerEl, categoryName);
