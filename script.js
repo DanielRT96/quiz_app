@@ -14,8 +14,10 @@ const categoryLabel = document.querySelector(".category-label");
 // Global variables
 let correctAnswer, timer, currentQuestion, categoryID, categoryName, currentID;
 const categoryData = [];
-const randomAPI = "http://jservice.io/api/random";
-const categoriesAPI = "http://jservice.io/api/categories?count=10";
+const randomAPI =
+  "https://cors-anywhere.herokuapp.com/https://jservice.io/api/random";
+const categoriesAPI =
+  "https://cors-anywhere.herokuapp.com/https://jservice.io/api/categories?count=10";
 
 //////////////// Functions //////////////////
 
